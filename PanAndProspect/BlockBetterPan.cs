@@ -31,12 +31,12 @@ public class BlockBetterPan : BlockPan
         {
             var block = api.World.GetBlock(new AssetLocation(code));
             if (block != null) return new ItemStack(block);
-            api.World.Logger.Error("Failed resolving panning block drop with code {0}. Will skip.", code);
+            PanAndProspectCore.Logger.Warning("Failed resolving panning block drop with code {0}. Will skip.", code);
             return null;
         }
         var item = api.World.GetItem(new AssetLocation(code));
         if (item != null) return new ItemStack(item);
-        api.World.Logger.Error("Failed resolving panning item drop with code {0}. Will skip.", code);
+        PanAndProspectCore.Logger.Warning("Failed resolving panning item drop with code {0}. Will skip.", code);
         return null;
     }
 
@@ -107,11 +107,11 @@ public class BlockBetterPan : BlockPan
             }
             if (WildcardUtil.Match("@(ore|gem|nugget)-.*", drop.Code.Path))
             {
-                PanAndProspectCore.Logger.Warning("Prospecting drop {0} with ore name {1}", drop.Code.Path, drop.Code.EndVariant());
+                PanAndProspectCore.Logger.VerboseDebug("Prospecting drop {0} with ore name {1}", drop.Code.Path, drop.Code.EndVariant());
                 var oreName = drop.Code.EndVariant();
                 var quantity = 0d;
                 prospects?.TryGetValue(oreName, out quantity);
-                PanAndProspectCore.Logger.Warning("Adding modifier {0} for ore name {1}", quantity, oreName);
+                PanAndProspectCore.Logger.VerboseDebug("Adding modifier {0} for ore name {1}", quantity, oreName);
                 drop.Chance.avg = (float) quantity/100;
             }
             var val = drop.Chance.nextFloat() * extraMul;
@@ -129,7 +129,7 @@ public class BlockBetterPan : BlockPan
     private static void SetMaterial(ItemSlot slot, Block block, [CanBeNull] Dictionary<string, double> prospects)
     {
         slot.Itemstack.Attributes.SetString("materialBlockCode", block.Code.ToShortString());
-        PanAndProspectCore.Logger.Warning("Set prospects for {0} to {1}", block.Code.ToShortString(), string.Join(",", prospects?.Keys ?? Enumerable.Empty<string>()));
+        PanAndProspectCore.Logger.VerboseDebug("Set prospects for {0} to {1}", block.Code.ToShortString(), string.Join(",", prospects?.Keys ?? Enumerable.Empty<string>()));
         if (prospects == null) return;
         slot.Itemstack.Attributes[Const.Attr.PanningContents] = prospects.ToTreeAttribute();
     }

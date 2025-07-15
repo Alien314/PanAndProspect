@@ -28,7 +28,7 @@ public class StoreProspectsBehavior(Block block) : BlockBehavior(block)
         api = coreApi;
         if (coreApi.Side != EnumAppSide.Server)
             return;
-        PanAndProspectCore.Logger.Warning("Propick workspace loaded: {0}", _proPickWorkSpace == null ? "null" : _proPickWorkSpace.ToString());
+        PanAndProspectCore.Logger.VerboseDebug("Propick workspace loaded: {0}", _proPickWorkSpace == null ? "null" : _proPickWorkSpace.ToString());
     }
 
     public override bool DoPlaceBlock(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, ItemStack byItemStack,
@@ -68,13 +68,12 @@ public class StoreProspectsBehavior(Block block) : BlockBehavior(block)
 
     public Dictionary<string, double> GenProspectsAtPos(IWorldAccessor world, BlockPos pos)
     {
-        PanAndProspectCore.Logger.Warning("GenProspectsAtPos: {0}", pos);
         var proPickReading = GenProbeResults(world, pos);
-        PanAndProspectCore.Logger.Warning("Probe results: {0}", proPickReading.OreReadings.Count);
+        PanAndProspectCore.Logger.VerboseDebug($"Probe results at pos {pos}: {proPickReading.OreReadings.Count}");
         var prospects = proPickReading.OreReadings
             .Where(kvp => kvp.Value.PartsPerThousand > PropickReading.MentionThreshold)
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.PartsPerThousand);
-        PanAndProspectCore.Logger.Warning("Prospects: {0}", prospects.Count);
+        PanAndProspectCore.Logger.VerboseDebug("Prospects: {0}", prospects.Count);
         return prospects;
     }
 
@@ -87,7 +86,7 @@ public class StoreProspectsBehavior(Block block) : BlockBehavior(block)
     [CanBeNull]
     public Dictionary<string, double> GetOrGenProspectsFromPos(ICoreServerAPI sapi, BlockPos pos)
     {
-        PanAndProspectCore.Logger.Warning("GetOrGenProspectsFromPos: {0}", pos);
+        PanAndProspectCore.Logger.VerboseDebug("GetOrGenProspectsFromPos: {0}", pos);
         var prospects = PanAndProspectCore.GetInstance(sapi).GetProspectsFromPos(sapi, pos);
         if (prospects != null) return prospects;
         prospects = GenProspectsAtPos(sapi.World, pos);

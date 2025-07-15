@@ -9,7 +9,7 @@ public static class BlockExtensions
 {
     public static void AddBehavior<T>(this Block block) where T : BlockBehavior
     {
-        PanAndProspectCore.Logger.Warning("Adding behavior {0} to collectible {1}", typeof(T).Name, block.Code);
+        PanAndProspectCore.Logger.Notification("Adding behavior {0} to collectible {1}", typeof(T).Name, block.Code);
         var existingBehavior =  block.BlockBehaviors.FirstOrDefault(b => b.GetType() == typeof(T));
         block.BlockBehaviors.Remove(existingBehavior);
         block.CollectibleBehaviors.Remove(existingBehavior);
