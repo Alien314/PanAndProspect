@@ -1,0 +1,13 @@
+[
+  {
+    "op": "addeach",
+    "path": "/attributes/panningDrops/@(sand|gravel|sandwavy)-.*/-",
+    "comment": "Only one item can drop, so items earlier in the list drop more often...",
+    "value": [
+	    { "type": "item", "code": "game:nugget-nativealuminum",		"chance": { "avg": 0, "var": 0 } },
+	    { "type": "item", "code": "game:ore-pyrolusite",		"chance": { "avg": 0, "var": 0 } },
+    ],
+    "file": "game:blocktypes/wood/pan.json",
+    "side": "Server"
+  }
+]
